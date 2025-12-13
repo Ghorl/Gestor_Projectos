@@ -1,0 +1,18 @@
+<nav>
+    <ul>
+        {% if user.is_authenticated %}
+            <li><a href="/logout">Logout</a></li>
+        {% else %}
+            {% if current_page != 'register' %}
+                <li><a href="/register">Register</a></li>
+            {% endif %}
+            {% if current_page != 'login' %}
+                <li><a href="/login">Login</a></li>
+            {% endif %}
+        {% endif %}
+        <li><a href="/projects">Projects</a></li>
+    </ul>
+</nav>
+
+{% block content %}
+{% endblock %}

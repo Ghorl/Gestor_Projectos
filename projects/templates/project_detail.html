@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{project}}</h1>
+  <a href="{% url 'create_instrument' project.id %}">Create Instrument</a>
+  <h2>Instruments</h2>
+<ul>
+  {% for instrument in instruments %}
+    <li>{{ instrument.n_instrument }}</li>
+  {% empty %}
+    <li>No hay instrumentos</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
