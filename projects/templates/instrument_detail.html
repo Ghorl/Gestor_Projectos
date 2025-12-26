@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ instrument }}</h1>
+
+{% if study %}
+    <h2>Studies</h2>
+    <ul>
+        {% for studies in study %}
+            <li>
+                {{ studies.n_study }} –
+                {% if studies.field %}
+                    <a href="{{ studies.field.url }}">
+                        {{ studies.field.name|cut:"studies/" }}
+                    </a>
+                {% else %}
+                    Sin archivo
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <a href="{% url 'create_study' instrument.id %}">Create Study</a>
+    <p>No hay estudios</p>
+{% endif %}
+
+{% endblock %}
+

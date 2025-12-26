@@ -3,8 +3,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.db import IntegrityError
-from .models import projects, instruments
-from .forms import create_new_instrument,create_new_projects
+from .models import projects, instruments,study
+from .forms import create_new_instrument,create_new_projects,create_new_study
 # Create your views here.
 
 def view_home(request):
@@ -53,6 +53,7 @@ def view_logout(request):
     logout(request)
     return redirect('home')
 
+#Projects
 def view_projects(request):
     project=projects.objects.all()
     return render(request,'projects.html',{
@@ -67,7 +68,8 @@ def view_create_project(request):
     else:
         project=projects.objects.create(name=request.POST['name'])
         return redirect('projects')
-    
+
+#Instuments 
 def view_project_detail(request,id):
     project=get_object_or_404(projects,id=id)
     instrument=instruments.objects.filter(project_id=id)
@@ -76,12 +78,44 @@ def view_project_detail(request,id):
         'instruments':instrument
     })
 
-def view_create_instrument(request,project_id):
-    project=get_object_or_404(projects,id=project_id)
+def view_create_instrument(request,id):
+    project=get_object_or_404(projects,id=id)
     if request.method=='GET':
         return render(request,'create_instrument.html',{
-            'form':create_new_instrument    
+            'form':create_new_instrument()
         })
     else:
         instruments.objects.create(n_instrument=request.POST['n_instrument'],project=project)
-        return redirect('project_detail',project_id=project.id)
+        return redirect('project_detail',id=project.id)
+    
+#Study
+
+def view_instrument_detail(request,id):
+    instrument=get_object_or_404(instruments,id=id)
+    studies=study.objects.filter(instrument_id=id)
+    return render(request,'instrument_detail.html',{
+        'instrument':instrument,
+        'study':studies
+    })
+
+def view_create_study(request, id):
+    instrument = get_object_or_404(instruments, id=id)
+
+    if request.method == 'GET':
+        return render(request, 'create_study.html', {
+            'form': create_new_study()
+        })
+    else:
+        study.objects.create(
+            n_study=request.POST['n_study'],
+            t_study=request.POST['t_study'],
+            year=request.POST['year'],
+            season=request.POST['season'],
+            n_specialist=request.POST['n_specialist'],
+            country=request.POST['country'],
+            taxon=request.POST['taxon'],
+            field=request.FILES.get('field'),
+            instrument=instrument
+        )
+        return redirect('instrument_detail', id=instrument.id)
+

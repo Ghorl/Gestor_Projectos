@@ -1,16 +1,12 @@
 <nav>
     <ul>
         {% if user.is_authenticated %}
-            <li><a href="/logout">Logout</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
         {% else %}
-            {% if current_page != 'register' %}
-                <li><a href="/register">Register</a></li>
-            {% endif %}
-            {% if current_page != 'login' %}
-                <li><a href="/login">Login</a></li>
-            {% endif %}
+            <li><a href="{% url 'register' %}">Register</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
         {% endif %}
-        <li><a href="/projects">Projects</a></li>
+        <li><a href="{% url 'projects' %}">Projects</a></li>
     </ul>
 </nav>
 
